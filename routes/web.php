@@ -24,3 +24,10 @@ Route::post('signup','Auth\RegisterController@register')->name('signup.post');
 Route::get('login','Auth\LoginController@showLoginForm')->name('login');
 Route::post('login','Auth\LoginController@login')->name('login.get');
 Route::get('logout','Auth\LoginController@logout')->name('logout.get');
+
+Route::group(['middleware'=>['auth']],function(){
+    //楽天APIを使った検索結果を表示するページ（create）のみを作成する。
+    //検索したものをすべて保存する必要はなく共有したいものだけを保存するので
+    //次のwant,have機能の実装の時にItemを保存する。
+    Route::resource('items','ItemsController',['only'=>['create']]);
+});
