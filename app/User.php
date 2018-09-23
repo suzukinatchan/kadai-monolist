@@ -33,6 +33,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Item::class)->withPivot('type')->withTimestamps();
     }
     
+    
     //userがwantしているitem一覧をあらわすためのメソッド
     public function want_items()
     {
@@ -84,6 +85,67 @@ class User extends Authenticatable
             return $item_code_exists;
         }
     }
+    
+    
+    //userがhaveしているitem一覧をあらわすためのメソッド
+    public function have_items()
+    {
+        return $this->items()->where('type', 'have');
+    }
+
+    //haveした時に中間テーブルにレコードを保存する。
+    public function have($itemId)
+    {
+        // 既に have しているかの確認
+        $exist = $this->is_having($itemId);
+
+        if ($exist) {
+            // 既に have していれば何もしない
+            return false;
+        } else {
+            // 未 have であればhave する
+            //wantかhaveかタイプを指定する必要がある。
+            $this->items()->attach($itemId, ['type' => 'have']);
+            return true;
+        }
+    }
+    
+    //
+    public function dont_have($itemId)
+    {
+        // 既に have しているかの確認
+        $exist = $this->is_having($itemId);
+
+        if ($exist) {
+            // 既に have していれば have を外す
+            //detachは使わなくてもmysqlのコードを直接書けば行ける。
+            //detachはtypeを絞り込んで削除することができないので直接SQLをコーディングしている。
+            //[$this->id, $itemId]で指定したuser_id,item_idを”？”の中に代入して中間テーブル内のレコードを指定している。
+            //$itemIdという仮引数は、メソッドの（）内に代入されたitem_idという名の数字が入るように変数化されている。
+            //item_idは中間テーブル用に作られた、itemにつけられたカラム(id）のこと。
+            \DB::delete("DELETE FROM item_user WHERE user_id = ? AND item_id = ? AND type = 'have'", [$this->id, $itemId]);
+        } else {
+            // 未 have であれば何もしない
+            return false;
+        }
+    }
+    
+    //is_numeric()は'1234'という文字列型の整数でも整数の数字だと判断する。
+    //$ItemIdOrCodeという仮引数はitem_idだったり、そのアイテムのコードだったりする。
+    //だから、整数ではない場合があるらしい
+    public function is_having($itemIdOrCode)
+    {
+        if (is_numeric($itemIdOrCode)) {
+            $item_id_exists = $this->have_items()->where('item_id', $itemIdOrCode)->exists();
+            return $item_id_exists;
+        } else {
+            $item_code_exists = $this->have_items()->where('code', $itemIdOrCode)->exists();
+            return $item_code_exists;
+        }
+    }
+    
+    
+    
     
 }
 

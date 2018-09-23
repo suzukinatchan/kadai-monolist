@@ -29,5 +29,8 @@ Route::group(['middleware'=>['auth']],function(){
     //楽天APIを使った検索結果を表示するページ（create）のみを作成する。
     //検索したものをすべて保存する必要はなく共有したいものだけを保存するので
     //次のwant,have機能の実装の時にItemを保存する。
-    Route::resource('items','ItemsController',['only'=>['create']]);
+    Route::resource('items','ItemsController',['only'=>['create','show']]);
+    Route::post('want', 'ItemUserController@want')->name('item_user.want');
+    Route::delete('want', 'ItemUserController@dont_want')->name('item_user.dont_want');
+    Route::resource('users', 'UsersController', ['only' => ['show']]);
 });

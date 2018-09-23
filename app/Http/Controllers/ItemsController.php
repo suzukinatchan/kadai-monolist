@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+//モデルを指定（重要）
+use \App\Item;
 
 class ItemsController extends Controller
 {
+    //検索した結果を配列（インスタンス）化するためのメソッド
      public function create()
     {
         //フォームから送信される検索ワードを取得
@@ -51,5 +54,17 @@ class ItemsController extends Controller
             'keyword' => $keyword,
             'items' => $items,
         ]);
+    }
+    
+     //wantやhaveしたユーザーたちを表示する。
+     public function show($id)
+    {
+      $item = Item::find($id);
+      $want_users = $item->want_users;
+
+      return view('items.show', [
+          'item' => $item,
+          'want_users' => $want_users,
+      ]);
     }
 }

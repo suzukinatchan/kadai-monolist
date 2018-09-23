@@ -19,4 +19,9 @@ class Item extends Model
     {
         return $this->users()->where('type', 'want');
     }
+    //haveしたUser一覧を取得するためのメソッド
+    public function have_users()
+    {
+        return $this->users()->where('type', 'have');
+    }
 }
