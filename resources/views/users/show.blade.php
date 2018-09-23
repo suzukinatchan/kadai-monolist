@@ -1,4 +1,7 @@
-<!--ユーザーがwantした商品一覧-->
+<!--
+ユーザーがwantした商品一覧
+ユーザーがhaveした商品一覧
+-->
 @extends('layouts.app')
 
 @section('content')
@@ -20,7 +23,7 @@
                 <li>
                     <div class="status-label">HAVE</div>
                     <div id="have_count" class="status-value">
-                        xxx
+                        {{$count_have}}
                     </div>
                 </li>
             </ul>

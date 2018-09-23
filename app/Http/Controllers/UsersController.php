@@ -23,6 +23,7 @@ class UsersController extends Controller
     {
         $user = User::find($id);
         $count_want = $user->want_items()->count();
+        $count_have = $user->have_items()->count();
         //検索で出てきたものがitemsテーブルに入り、item_user中間テーブルの中で
         //itemsテーブルのidと中間テーブルのitem_idを結合する
         //次に中間テーブルのuser_idとログインユーザーのidがつながっている
@@ -34,7 +35,7 @@ class UsersController extends Controller
             'user' => $user,
             'items' => $items,
             'count_want' => $count_want,
-            // 'count_have' => $count_have,
+            'count_have' => $count_have,
         ]);
     }
 }
