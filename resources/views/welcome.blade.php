@@ -14,5 +14,7 @@
 @endsection
 
 @section('content')
-    テスト
+    <!--検索結果を表示する場所(一度wantしたものは全部出てくる）-->
+    @include('items.items')
+    {!! $items->render() !!}
 @endsection
