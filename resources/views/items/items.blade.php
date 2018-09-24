@@ -8,7 +8,7 @@ $itemsには一度検索されたアイテムがすべてテーブルに入っ�
 -->
 @if ($items)
     <div class="row">
-        @foreach ($items as $item)
+        @foreach ($items as $key => $item)
             <div class="item">
                 <div class="col-md-3 col-sm-4 col-xs-12">
                     <div class="panel panel-default">
@@ -28,6 +28,17 @@ $itemsには一度検索されたアイテムがすべてテーブルに入っ�
                                 @endif
                             </div>
                         </div>
+                        @if (isset($item->want_ranking_count))
+                            <div class="panel-footer">
+                                <p class="text-center">{{$key+1 }}位: {{ $item->want_ranking_count}} Wants</p>
+                            </div>
+                        @endif
+                        @if (isset($item->have_ranking_count))
+                            <div class="panel-footer">
+                                <p class="text-center">{{$key+1 }}位: {{ $item->have_ranking_count}} Have</p>
+                            </div>
+                        @endif
+                         
                     </div>
                 </div>
             </div>
